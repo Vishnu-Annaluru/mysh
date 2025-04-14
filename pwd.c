@@ -1,7 +1,5 @@
 #include "pwd.h"
-#include <stdio.h>
 #include <unistd.h>
-#include <limits.h>
 #include <stdlib.h>
 
 #define MAX_PATH 1024
