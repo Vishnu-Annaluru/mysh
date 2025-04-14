@@ -1,10 +1,16 @@
 CC     = gcc
 CFLAGS = -g -std=c99 -Wall -Wvla -Werror -fsanitize=address,undefined
 
-TARGET = mysh
+all: mysh
 
-$(TARGET): $(TARGET).c
-	$(CC) $(CFLAGS) -o $(TARGET) $(TARGET).c
+mysh: mysh.o arraylist.o
+	$(CC) $(CFLAGS) mysh.o arraylist.o -o mysh
+
+mysh.o: mysh.c arraylist.h
+	$(CC) $(CFLAGS) -c mysh.c
+
+arraylist.o: arraylist.c arraylist.h
+	$(CC) $(CFLAGS) -c arraylist.c
 
 clean:
-	rm -rf $(TARGET) *.o *.a *.dylib *.dSYM
+	rm -rf *.o mysh
