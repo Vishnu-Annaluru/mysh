@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
-char* which(char* command) {
+char* which(char* command){
 
     // Check if command is a built-in
     if( strcmp(command, "cd") == 0 || 
@@ -20,10 +20,12 @@ char* which(char* command) {
     char* paths[] = {"/usr/local/bin", "/usr/bin", "/bin"};
     
     int i;
-    for(i = 0; i < 3; i++) {
-        size_t pathLength = strlen(paths[i]) + strlen(command) + 2; // +2 for '/' and null terminator
+    for(i = 0; i < 3; i++){
+
+        int pathLength = strlen(paths[i]) + strlen(command) + 2; // for '/' and null terminator
+        
         char* path = malloc(pathLength);
-        if (!path) {
+        if(!path){
             return NULL;
         }
         
@@ -34,9 +36,8 @@ char* which(char* command) {
             return path;
         }
         
-        free(path); // Free the path if command not found in this directory
+        free(path); // If found, need to free in mysh
     }
     
-    // Command not found in any of the search directories
     return NULL;
 }
