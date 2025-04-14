@@ -4,7 +4,11 @@
 #include <string.h>
 #include <signal.h>
 #include <stdbool.h>
+#include <sys/types.h>
 #include "arraylist.h"
+#include "pwd.h"
+#include "cd.h"
+#include "which.h"
 
 arraylist_t getCommandList(char *str){
     arraylist_t list;
@@ -17,6 +21,53 @@ arraylist_t getCommandList(char *str){
     }
     
     return list;
+}
+
+void executeCommand(arraylist_t *list, int *index) {
+    char *command = list->data[*index];
+    (*index)++;
+    
+    if(strcmp(command, "cd") == 0) {
+        // Check if there's a path argument
+        if (*index < list->length) {
+            char *path = list->data[*index];
+            (*index)++; // Skip the path argument
+            cd(path);
+        } else {
+            fprintf(stderr, "cd: missing argument\n");
+        }
+    } else if(strcmp(command, "which") == 0) {
+        if (*index < list->length) {
+            char *cmd = list->data[*index];
+            char* path = which(cmd);
+            if (path != NULL) {
+                printf("%s\n", path);
+                fflush(stdout);
+                free(path);
+            } else {
+                fprintf(stderr, "which: command not found\n");
+            }
+            (*index)++;
+        } else {
+            fprintf(stderr, "which: missing argument\n");
+        }
+    } else if(strcmp(command, "pwd") == 0) {
+        char* directory = pwd();
+        if(directory != NULL) {
+            printf("%s\n", directory);
+            fflush(stdout);
+            free(directory);
+        } else {
+            perror("pwd failed");
+        }
+    }
+}
+
+void executeCommands(arraylist_t *list) {
+    int i = 0;
+    while (i < list->length) {
+        executeCommand(list, &i);
+    }
 }
 
 char* readLine() {
@@ -89,15 +140,17 @@ int main(int argc, char *argv[]) {
             free(buffer);
             break;
         }
+
         
-        // Echo the command
-        printf("You typed: %s\n", buffer);
+       
         
         arraylist_t list = getCommandList(buffer);
-
-        for (int i = 0; i < list.length; i++) {
-            printf("Command %d = \"%s\"\n", i+1, list.data[i]);
-        }
+        // int i;
+        // for (i = 0; i < list.length; i++) {
+        //     printf("Command %d = \"%s\"\n", i+1, list.data[i]);
+        // }
+        
+        executeCommands(&list);
 
         al_destroy(&list);
         
