@@ -1,4 +1,6 @@
+.vscode/
 mysh*
 arraylist*
 pwd.o
-.vscode/
+cd.o
+which.o
