@@ -5,6 +5,6 @@
 void cd(char* path) {
     int c = chdir(path);
     if(c != 0){
-        perror("cd failed");
+        perror("cd");
     }
 }
