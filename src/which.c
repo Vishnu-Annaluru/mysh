@@ -31,12 +31,12 @@ char* which(char* command){
         
         snprintf(path, pathLength, "%s/%s", paths[i], command);
         
-        // Check if file exists using access()
+        // check if file exists using access()
         if(access(path, X_OK) == 0){
             return path;
         }
         
-        free(path); // If found, need to free in mysh
+        free(path); // need to free in mysh
     }
     
     return NULL;
