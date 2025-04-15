@@ -1,6 +1,3 @@
 .vscode/
-mysh*
-arraylist*
-pwd.o
-cd.o
-which.o
+mysh
+*.o
