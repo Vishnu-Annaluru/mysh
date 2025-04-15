@@ -1,3 +1,4 @@
 .vscode/
 mysh
 *.o
+obj/

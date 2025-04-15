@@ -1,4 +1,4 @@
-#include "which.h"
+#include "../include/which.h"
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>

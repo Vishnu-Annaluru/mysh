@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <assert.h>
-#include "arraylist.h"
+#include "../include/arraylist.h"
 
 /* 
 Set initial values of arraylist and allocate storage array.

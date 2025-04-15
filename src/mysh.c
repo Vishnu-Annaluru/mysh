@@ -5,10 +5,10 @@
 #include <signal.h>
 #include <stdbool.h>
 #include <fcntl.h>
-#include "arraylist.h"
-#include "tokenizer.h"
-#include "wildcard.h"
-#include "executor.h"
+#include "../include/arraylist.h"
+#include "../include/tokenizer.h"
+#include "../include/wildcard.h"
+#include "../include/executor.h"
 
 #define MAX_PATH 4096
 

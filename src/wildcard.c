@@ -1,4 +1,4 @@
-#include "wildcard.h"
+#include "../include/wildcard.h"
 #include <string.h>
 #include <dirent.h>
 #include <stdio.h>

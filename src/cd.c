@@ -1,4 +1,4 @@
-#include "cd.h"
+#include "../include/cd.h"
 #include <unistd.h>
 #include <stdio.h>
 

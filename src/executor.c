@@ -1,9 +1,9 @@
-#include "executor.h"
-#include "pwd.h"
-#include "cd.h"
-#include "which.h"
-#include "wildcard.h"
-#include "die.h"
+#include "../include/executor.h"
+#include "../include/pwd.h"
+#include "../include/cd.h"
+#include "../include/which.h"
+#include "../include/wildcard.h"
+#include "../include/die.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
