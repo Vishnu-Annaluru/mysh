@@ -5,96 +5,118 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-void expandWildcard(char *pattern, arraylist_t *expanded) {
-    // Find the directory and filename pattern
-    char *lastSlash = strrchr(pattern, '/');
-    char dir_path[MAX_PATH] = ".";
-    char file_pattern[MAX_PATH];
+void expandWildcard(char *pattern, arraylist_t *expanded){
     
-    if (lastSlash) {
-        strncpy(dir_path, pattern, lastSlash - pattern);
-        dir_path[lastSlash - pattern] = '\0';
-        strcpy(file_pattern, lastSlash + 1);
-    } else {
-        strcpy(file_pattern, pattern);
+    // MAX_PATH is defined in the header :)
+
+    char *lastSegment = strrchr(pattern, '/');
+    char path[MAX_PATH] = ".";
+    char filePattern[MAX_PATH];
+    
+    if(lastSegment){
+
+        strncpy(path, pattern, lastSegment - pattern);
+        path[lastSegment - pattern] = '\0';
+        strcpy(filePattern, lastSegment + 1);
+
+    }
+    else{
+        strcpy(filePattern, pattern);
     }
     
-    // Find the prefix and suffix around the asterisk
-    char *asterisk = strchr(file_pattern, '*');
-    if (!asterisk) {
-        char *copy = malloc(strlen(pattern) + 1);
-        if (copy == NULL) {
-            perror("malloc failed");
-            return;
-        }
-        strcpy(copy, pattern);
-        al_append(expanded, copy);
-        return;
-    }
-    
-    char prefix[MAX_PATH];
-    char suffix[MAX_PATH];
-    
-    strncpy(prefix, file_pattern, asterisk - file_pattern);
-    prefix[asterisk - file_pattern] = '\0';
-    strcpy(suffix, asterisk + 1);
-    
-    DIR *dir = opendir(dir_path);
-    if (!dir) {
-        char *copy = malloc(strlen(pattern) + 1);
-        if (copy == NULL) {
-            perror("malloc failed");
-            return;
-        }
-        strcpy(copy, pattern);
-        al_append(expanded, copy);
-        return;
-    }
-    
-    struct dirent *entry;
-    bool found_match = false;
-    
-    while ((entry = readdir(dir)) != NULL) {
-        if (entry->d_name[0] == '.' && prefix[0] != '.')
-            continue;
+    char *asterisk = strchr(filePattern, '*');
+    if(!asterisk){
         
-        size_t name_len = strlen(entry->d_name);
-        size_t prefix_len = strlen(prefix);
-        size_t suffix_len = strlen(suffix);
-        if (name_len >= prefix_len + suffix_len &&
-            strncmp(entry->d_name, prefix, prefix_len) == 0 &&
-            (suffix_len == 0 || strcmp(entry->d_name + name_len - suffix_len, suffix) == 0)) {
+        char *temp = malloc(strlen(pattern) + 1);
+        if(temp == NULL){
+            perror("malloc failed");
+            return;
+        }
+
+        strcpy(temp, pattern);
+        al_append(expanded, temp);
+        return;
+    }
+    
+    char before[MAX_PATH];
+    char after[MAX_PATH];
+    
+    strncpy(before, filePattern, asterisk - filePattern);
+    before[asterisk - filePattern] = '\0';
+    strcpy(after, asterisk + 1);
+    
+    DIR *dir = opendir(path);
+    if(!dir){
+        
+        char *temp = malloc(strlen(pattern) + 1);
+        if(temp == NULL){
+            perror("malloc failed");
+            return;
+        }
+        
+        strcpy(temp, pattern);
+        al_append(expanded, temp);
+        return;
+    }
+    
+    // dirent
+    struct dirent *entry;
+    bool found = false;
+    
+    while((entry = readdir(dir)) != NULL){
+        
+        // ignoring files that start with a period
+        if((entry->d_name[0]) == '.' && (before[0] != '.')){
+            continue;
+        }
+        
+        size_t nameLength = strlen(entry->d_name);
+        size_t beforeLength = strlen(before);
+        size_t afterLen = strlen(after);
+
+        if((strncmp(entry->d_name, before, beforeLength) == 0) && (afterLen == 0 || strcmp(entry->d_name + nameLength - afterLen, after) == 0) && (nameLength >= beforeLength + afterLen)){
             
-            char full_path[MAX_PATH];
-            if (strcmp(dir_path, ".") == 0) {
-                if (snprintf(full_path, MAX_PATH, "%s", entry->d_name) >= MAX_PATH)
-                    full_path[MAX_PATH - 1] = '\0';
-            } else {
-                if (snprintf(full_path, MAX_PATH, "%s/%s", dir_path, entry->d_name) >= MAX_PATH)
-                    full_path[MAX_PATH - 1] = '\0';
+            char fullPath[MAX_PATH];
+            if(strcmp(path, ".") == 0){
+                if(snprintf(fullPath, MAX_PATH, "%s", entry->d_name) >= MAX_PATH){
+                    fullPath[MAX_PATH - 1] = '\0';
+                }
+            }
+            else{
+                if(snprintf(fullPath, MAX_PATH, "%s/%s", path, entry->d_name) >= MAX_PATH){
+                    fullPath[MAX_PATH - 1] = '\0';
+                }
             }
             
-            char *copy = malloc(strlen(full_path) + 1);
-            if (copy == NULL) {
+
+            // allocate full path str
+
+            char *temp = malloc(strlen(fullPath) + 1);
+            if(temp == NULL){
                 perror("malloc failed");
                 closedir(dir);
                 return;
             }
-            strcpy(copy, full_path);
-            al_append(expanded, copy);
-            found_match = true;
+
+            strcpy(temp, fullPath);
+            al_append(expanded, temp);
+            found = true;
+
         }
     }
     
+    // close directory
     closedir(dir);
     
-    if (!found_match) {
-        char *copy = malloc(strlen(pattern) + 1);
-        if (copy == NULL) {
+    // add original if no matches
+    if(!found){
+        char *temp = malloc(strlen(pattern) + 1);
+        if(temp == NULL){
             perror("malloc failed");
             return;
         }
-        strcpy(copy, pattern);
-        al_append(expanded, copy);
+
+        strcpy(temp, pattern);
+        al_append(expanded, temp);
     }
 }
