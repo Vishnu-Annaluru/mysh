@@ -85,4 +85,3 @@ int al_remove(arraylist_t *l, char **dest)
 
     return 1;
 }
-
