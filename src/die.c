@@ -3,12 +3,13 @@
 #include <stdlib.h>
 
 // Terminate with failure after printing any arguments
-void die(char **args, int count) {
+void die(char **args, int count){
 
     if(count > 0){
-        for (int i = 0; i < count; i++) {
+        int i;
+        for(i = 0; i < count; i++){
             printf("%s", args[i]);
-            if (i < count - 1) {
+            if(i < count - 1){
                 printf(" ");
             }
         }
