@@ -156,7 +156,7 @@ void executeCommand(arraylist_t *list, int *index, int end_idx) {
             
             // Set up output redirection
             if (outfile != NULL) {
-                int fd = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+                int fd = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0640);
                 if (fd == -1) {
                     perror("Failed to open output file");
                     exit(EXIT_FAILURE);
