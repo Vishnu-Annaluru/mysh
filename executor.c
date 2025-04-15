@@ -3,6 +3,7 @@
 #include "cd.h"
 #include "which.h"
 #include "wildcard.h"
+#include "die.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -53,6 +54,26 @@ void executeCommand(arraylist_t *list, int *index, int end_idx) {
         } else {
             perror("pwd failed");
         }
+    } else if (strcmp(command, "die") == 0) {
+        // Extract arguments for die
+        int arg_count = end_idx - *index;
+        char **args = malloc((arg_count + 1) * sizeof(char *));
+        if (!args) {
+            perror("Memory allocation failed");
+            return;
+        }
+        
+        // Copy arguments
+        for (int i = 0; i < arg_count; i++) {
+            args[i] = list->data[*index + i];
+        }
+        args[arg_count] = NULL;
+        
+        // Call die with arguments
+        die(args, arg_count);
+        
+        // Note: die() will exit, so this code won't be reached
+        free(args);
     } else {
         // External command execution
         char *path;
