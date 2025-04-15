@@ -1,8 +1,8 @@
 CC     = gcc
 CFLAGS = -g -std=c99 -Wall -Wvla -Werror -fsanitize=address,undefined
 
-OBJS = mysh.o arraylist.o pwd.o cd.o which.o tokenizer.o wildcard.o executor.o
-HEADERS = arraylist.h pwd.h cd.h which.h tokenizer.h wildcard.h executor.h
+OBJS = mysh.o arraylist.o pwd.o cd.o which.o die.o tokenizer.o wildcard.o executor.o
+HEADERS = arraylist.h pwd.h cd.h which.h die.h tokenizer.h wildcard.h executor.h
 
 all: mysh
 
@@ -23,6 +23,9 @@ cd.o: cd.c cd.h
 
 which.o: which.c which.h
 	$(CC) $(CFLAGS) -c which.c
+
+die.o: die.c die.h
+	$(CC) $(CFLAGS) -c die.c
 
 tokenizer.o: tokenizer.c tokenizer.h
 	$(CC) $(CFLAGS) -c tokenizer.c
