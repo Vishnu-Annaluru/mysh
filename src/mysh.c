@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
             continue;
         }
         
-        if (strcmp(buffer, "exit") == 0 || strcmp(buffer, "die") == 0) {
+        if (strcmp(buffer, "exit") == 0){
             if (interactive)
                 printf("exiting\n");
             free(buffer);
