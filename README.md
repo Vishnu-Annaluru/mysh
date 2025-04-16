@@ -6,7 +6,7 @@
 
 \$ cd P3\
 \$ make\
-\$ ./mysh OR ./mysh
+\$ ./mysh *OR* ./mysh "inputFile"
 
 ## How to test:
 
