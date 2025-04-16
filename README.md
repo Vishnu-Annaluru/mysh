@@ -1,5 +1,20 @@
 ## Vishnu Annaluru (vta11)
+
 # mysh
+
+## How to run:
+
+\$ cd P3\
+\$ make\
+\$ ./mysh OR ./mysh
+
+## How to test:
+
+\$ cd P3\
+\$ cd test\
+\$ ./runTests.sh
+
+## Implementation
 
 ### Modes
 
@@ -34,6 +49,8 @@ Open the directory and add all files that match the pattern to the argument list
 
 '|' denotes a pipeline, where both programs have their own argument list and file redirections.
 
+NOTE: Conditionals not implemented at this point
+
 'and' and 'or' are not added to the argument list, a command starting with 'and' is executed if the previous command succeeded, and commands starting with 'or' execute when the previous command failed (checking the exit status)
 Conditionals are not allowed in the first command, and they apply to the entire command even if there is '|'. However, 'and' or 'or' after a '|' is not allowed
 
@@ -55,7 +72,9 @@ mysh itself should always exit with status EXIT_SUCCESS, except after executing 
 If the first argument to mysh c ontains a '/', it will be treated as an executable path
 
 If it does not have a '/', and is not a built in program, look through '/usr/local/bin', then '/usr/bin' then '/bin'
-Can use access()
+Using access()
+
+NOTE: There is no error message for trying to run programs that do not exist
 
 #### Built-in programs
 Implemented by mysh and are allowed to be used for redirection and pipes
@@ -65,10 +84,3 @@ Implemented by mysh and are allowed to be used for redirection and pipes
   arguments, or if the program is not found
 - exit: Stop reading commands and terminate with EXIT_SUCCESS after executing any job involving exit
 - die: Stop reading commands and terminate with EXIT_FAILURE, takes any number of arguments and prints each argument separated by spaces
-
-FIX
-
-
-All three of these commands will simply ignore standard input, but pwd, which, and exit have output that could be sent to a file or piped to another program.
-
-Also will you print out some error message if a command does not exist
