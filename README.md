@@ -1,16 +1,12 @@
-## Vishnu Annaluru (vta11)
-
 # mysh
 
 ## How to run:
 
-\$ cd P3\
 \$ make\
 \$ ./mysh *OR* ./mysh "inputFile"
 
 ## How to test:
 
-\$ cd P3\
 \$ cd test\
 \$ ./runTests.sh
 
